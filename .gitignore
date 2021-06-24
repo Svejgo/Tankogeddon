@@ -1,0 +1,8 @@
+.vs
+Intermediate
+Saved
+DerivedDataCache             
+!Binaries/Win64/UE4Editor*.dll
+!Binaries/Win64/UE4Editor*.pdb
+!Binaries/Win64/UE4Editor*.build
+!Binaries/Win64/*Editor.modules

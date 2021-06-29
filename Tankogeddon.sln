@@ -7,11 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{94A6C6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Games", "Games", "{8E2F6A87-1826-34F4-940C-CC23A48F9FE4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UE4", "Intermediate\ProjectFiles\UE4.vcxproj", "{269973C0-F1F2-4169-B7C5-F5336D3C62F2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UE4", "Intermediate\ProjectFiles\UE4.vcxproj", "{110ACCA9-3152-43FC-86CC-35A95ED1F6EF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tankogeddon", "Intermediate\ProjectFiles\Tankogeddon.vcxproj", "{A1D514C6-D0D3-4A34-B825-69C6F2452D05}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tankogeddon", "Intermediate\ProjectFiles\Tankogeddon.vcxproj", "{A8DF7BEE-978C-43DF-B5CC-2E647A8C923D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TankogeddonEditor", "Intermediate\ProjectFiles\TankogeddonEditor.vcxproj", "{C73F5667-D13A-4FE7-A605-108856147548}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TankogeddonEditor", "Intermediate\ProjectFiles\TankogeddonEditor.vcxproj", "{C506E977-CEB7-43B0-A052-6F832BBBEB8C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Visualizers", "Visualizers", "{1CCEC849-CC72-4C59-8C36-2F7C38706D4C}"
 	ProjectSection(SolutionItems) = preProject
@@ -24,23 +24,23 @@ Global
 		Development Editor|Win64 = Development Editor|Win64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{269973C0-F1F2-4169-B7C5-F5336D3C62F2}.DebugGame Editor|Win64.ActiveCfg = BuiltWithUnrealBuildTool|Win32
-		{269973C0-F1F2-4169-B7C5-F5336D3C62F2}.Development Editor|Win64.ActiveCfg = BuiltWithUnrealBuildTool|Win32
-		{A1D514C6-D0D3-4A34-B825-69C6F2452D05}.DebugGame Editor|Win64.ActiveCfg = DebugGame_Editor|x64
-		{A1D514C6-D0D3-4A34-B825-69C6F2452D05}.DebugGame Editor|Win64.Build.0 = DebugGame_Editor|x64
-		{A1D514C6-D0D3-4A34-B825-69C6F2452D05}.Development Editor|Win64.ActiveCfg = Development_Editor|x64
-		{A1D514C6-D0D3-4A34-B825-69C6F2452D05}.Development Editor|Win64.Build.0 = Development_Editor|x64
-		{C73F5667-D13A-4FE7-A605-108856147548}.DebugGame Editor|Win64.ActiveCfg = DebugGame_Editor|x64
-		{C73F5667-D13A-4FE7-A605-108856147548}.DebugGame Editor|Win64.Build.0 = DebugGame_Editor|x64
-		{C73F5667-D13A-4FE7-A605-108856147548}.Development Editor|Win64.ActiveCfg = Development_Editor|x64
-		{C73F5667-D13A-4FE7-A605-108856147548}.Development Editor|Win64.Build.0 = Development_Editor|x64
+		{110ACCA9-3152-43FC-86CC-35A95ED1F6EF}.DebugGame Editor|Win64.ActiveCfg = BuiltWithUnrealBuildTool|Win32
+		{110ACCA9-3152-43FC-86CC-35A95ED1F6EF}.Development Editor|Win64.ActiveCfg = BuiltWithUnrealBuildTool|Win32
+		{A8DF7BEE-978C-43DF-B5CC-2E647A8C923D}.DebugGame Editor|Win64.ActiveCfg = DebugGame_Editor|x64
+		{A8DF7BEE-978C-43DF-B5CC-2E647A8C923D}.DebugGame Editor|Win64.Build.0 = DebugGame_Editor|x64
+		{A8DF7BEE-978C-43DF-B5CC-2E647A8C923D}.Development Editor|Win64.ActiveCfg = Development_Editor|x64
+		{A8DF7BEE-978C-43DF-B5CC-2E647A8C923D}.Development Editor|Win64.Build.0 = Development_Editor|x64
+		{C506E977-CEB7-43B0-A052-6F832BBBEB8C}.DebugGame Editor|Win64.ActiveCfg = DebugGame_Editor|x64
+		{C506E977-CEB7-43B0-A052-6F832BBBEB8C}.DebugGame Editor|Win64.Build.0 = DebugGame_Editor|x64
+		{C506E977-CEB7-43B0-A052-6F832BBBEB8C}.Development Editor|Win64.ActiveCfg = Development_Editor|x64
+		{C506E977-CEB7-43B0-A052-6F832BBBEB8C}.Development Editor|Win64.Build.0 = Development_Editor|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{269973C0-F1F2-4169-B7C5-F5336D3C62F2} = {94A6C6F3-99B3-346E-9557-ABF9D4064DBD}
-		{A1D514C6-D0D3-4A34-B825-69C6F2452D05} = {8E2F6A87-1826-34F4-940C-CC23A48F9FE4}
-		{C73F5667-D13A-4FE7-A605-108856147548} = {8E2F6A87-1826-34F4-940C-CC23A48F9FE4}
+		{110ACCA9-3152-43FC-86CC-35A95ED1F6EF} = {94A6C6F3-99B3-346E-9557-ABF9D4064DBD}
+		{A8DF7BEE-978C-43DF-B5CC-2E647A8C923D} = {8E2F6A87-1826-34F4-940C-CC23A48F9FE4}
+		{C506E977-CEB7-43B0-A052-6F832BBBEB8C} = {8E2F6A87-1826-34F4-940C-CC23A48F9FE4}
 	EndGlobalSection
 EndGlobal

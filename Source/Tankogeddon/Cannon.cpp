@@ -2,6 +2,8 @@
 
 
 #include "Cannon.h"
+#include "Projectile.h"
+#include "DrawDebugHelpers.h"
 #include <Components/ArrowComponent.h>
 
 // Sets default values
@@ -36,11 +38,39 @@ void ACannon::Fire()
 	if (Type == ECannonType::FireProjectile)
 	{
 		GEngine->AddOnScreenDebugMessage(10, 1.f, FColor::Green, TEXT("Fire - projectile"));
+		AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, ProjectileSpawnPoint->GetComponentLocation(), ProjectileSpawnPoint->GetComponentRotation());
+		if (Projectile)
+		{
+			Projectile->MoveRange = FireRange;
+			Projectile->Start();
+		}
 		Ammo--;
+		UE_LOG(LogTemp, Warning, TEXT("Ammo - %d"), this->Ammo);
 	}
-	if (Type == ECannonType::FireTrace)
+	else if (Type == ECannonType::FireTrace)
 	{
 		GEngine->AddOnScreenDebugMessage(10, 1.f, FColor::Green, TEXT("Fire - trace"));
+
+		FHitResult HitResult;
+		FVector StartPoint = ProjectileSpawnPoint->GetComponentLocation();
+		FVector EndPoint = StartPoint + ProjectileSpawnPoint->GetForwardVector() * FireRange;
+		FCollisionQueryParams TraceParams = FCollisionQueryParams(FName("FireTrace"), true, this);
+		TraceParams.bTraceComplex = true;
+		TraceParams.bReturnPhysicalMaterial = false;
+		if (GetWorld()->LineTraceSingleByChannel(HitResult, StartPoint, EndPoint, ECollisionChannel::ECC_Visibility, TraceParams))
+		{
+			DrawDebugLine(GetWorld(), StartPoint, HitResult.Location, FColor::Red, false, 0.5f, 0, 5);
+			if (HitResult.Actor.IsValid())
+			{
+				HitResult.Actor->Destroy();
+			}
+		}
+		else
+		{
+			DrawDebugLine(GetWorld(), StartPoint, EndPoint, FColor::Red, false, 0.5f, 0, 5);
+		}
+		Ammo--;
+		UE_LOG(LogTemp, Warning, TEXT("Ammo - %d"), this->Ammo);
 	}
 
 	GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, this, &ACannon::Reload, 1.0f / FireRate, false);
@@ -67,14 +97,21 @@ void ACannon::AltFire()
 		GetWorld()->GetTimerManager().SetTimer(RapidFireTimerHandle, FTimerDelegate::CreateLambda([=]() 
 			{
 				GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.f, FColor::Blue, TEXT("AltFire - rapidshot - projectile"), true);
+				AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, ProjectileSpawnPoint->GetComponentLocation(), ProjectileSpawnPoint->GetComponentRotation());
+				if (Projectile)
+				{
+					Projectile->MoveRange = FireRange;
+					Projectile->Start();
+				};
 			}), AltFireShotsRate, true);
 		GetWorld()->GetTimerManager().SetTimer(RapidFireTimerHandleDelegator, FTimerDelegate::CreateLambda([=]()
 			{
 				GetWorldTimerManager().ClearTimer(RapidFireTimerHandle);
 			}
-		), AltFireShotsRate + (AltFireShotsRate * AltFireShots), false);
+		), (AltFireShotsRate * AltFireShots), false);
 	
 		Ammo--;
+		UE_LOG(LogTemp, Warning, TEXT("Ammo - %d"), this->Ammo);
 	}
 	if (Type == ECannonType::FireTrace)
 	{
@@ -89,6 +126,7 @@ void ACannon::AltFire()
 		), AltFireShotsRate + (AltFireShotsRate * AltFireShots), false);
 
 		Ammo--;
+		UE_LOG(LogTemp, Warning, TEXT("Ammo - %d"), this->Ammo);
 	}
 
 	GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, this, &ACannon::Reload, 1.0f / AltFireRate, false);
@@ -120,3 +158,7 @@ void ACannon::Reload()
 	bIsReadyToFire = true;
 }
 
+void ACannon::AddAmmo(int32 AddedAmmo)
+{
+	Ammo += AddedAmmo;
+}

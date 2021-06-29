@@ -45,7 +45,7 @@ void ATankPawn::BeginPlay()
 	Super::BeginPlay();
 	TankController = Cast<ATankPlayerController>(GetController());
 
-	SetupCannon();
+	SetupCannon(FirstCannonClass);
 }
 
 // Called every frame
@@ -110,7 +110,7 @@ void ATankPawn::Fire()
 	}
 }
 
-void ATankPawn::SetupCannon()
+void ATankPawn::SetupCannon(TSubclassOf<class ACannon> NewCannon)
 {
 	if (Cannon)
 	{
@@ -118,12 +118,26 @@ void ATankPawn::SetupCannon()
 		Cannon = nullptr;
 	}
 
-	if (CannonClass)
+	if (NewCannon)
 	{
 		FActorSpawnParameters Params;
 		Params.Instigator = this;
 		Params.Owner = this;
-		Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, Params);
+		Cannon = GetWorld()->SpawnActor<ACannon>(NewCannon, Params);
 		Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
 	}
+}
+
+void ATankPawn::AddAmmo(int32 Ammo)
+{
+	Cannon->AddAmmo(Ammo);
+}
+
+void ATankPawn::SwapWeapon()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Weapon swapped"));
+	//??????
+	TSubclassOf<ACannon> TempCannon = this->FirstCannonClass;
+	this->SetupCannon(SecondCannonClass);
+	SecondCannonClass = TempCannon;
 }

@@ -7,7 +7,7 @@
 #include "TankPlayerController.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class TANKOGEDDON_API ATankPlayerController : public APlayerController
@@ -17,25 +17,26 @@ class TANKOGEDDON_API ATankPlayerController : public APlayerController
 public:
 	ATankPlayerController();
 
-		virtual void BeginPlay() override;
-		virtual void SetupInputComponent() override;
-		virtual void Tick(float DeltaSeconds) override;
+	virtual void BeginPlay() override;
+	virtual void SetupInputComponent() override;
+	virtual void Tick(float DeltaSeconds) override;
 
-		UFUNCTION(BlueprintPure, Category = "Input")
+	UFUNCTION(BlueprintPure, Category = "Input")
 		FVector GetMousePos() const;
 
 private:
-		void MoveForward(float AxisValue);
-		void MoveRight(float AxisValue);
-		void RotateRight(float AxisValue);
-		void Fire();
-		void AltFire();
+	void MoveForward(float AxisValue);
+	void MoveRight(float AxisValue);
+	void RotateRight(float AxisValue);
+	void Fire();
+	void AltFire();
+	void SwapWeapon();
 
 private:
 	UPROPERTY()
 		class ATankPawn* TankPawn;
 
-	
+
 
 	FVector CachedMousePos;
 };

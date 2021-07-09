@@ -40,6 +40,8 @@ public:
 		float FireDamage = 1;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
 		ECannonType Type = ECannonType::FireProjectile;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
+		TSubclassOf<class AProjectile> ProjectileClass;
 
 	UFUNCTION(BlueprintCallable, Category = "Fire")
 		void Fire();
@@ -51,7 +53,11 @@ public:
 		bool IsReadyToFire() const;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret|Cannon")
-		int Ammo = 10;
+		int32 Ammo = 10;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret|Cannon")
+		float TraceDamage = 1.f;
+	UFUNCTION()
+	void AddAmmo(int32 AddedAmmo);
 
 protected:
 	// Called when the game starts or when spawned
@@ -59,6 +65,7 @@ protected:
 	virtual void EndPlay(EEndPlayReason::Type Reason) override;
 
 	void Reload();
+	
 
 private:
 	bool bIsReadyToFire = false;

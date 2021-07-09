@@ -26,6 +26,7 @@ void ATankPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("RotateRight", this, &ATankPlayerController::RotateRight);
 	InputComponent->BindAction("Fire",IE_Pressed, this, &ATankPlayerController::Fire);
 	InputComponent->BindAction("AltFire",IE_Pressed, this, &ATankPlayerController::AltFire);
+	InputComponent->BindAction("SwapWeapon",IE_Pressed, this, &ATankPlayerController::SwapWeapon);
 }
 
 void ATankPlayerController::Tick(float DeltaSeconds)
@@ -89,5 +90,13 @@ void ATankPlayerController::Fire()
 	if (TankPawn)
 	{
 		TankPawn->AltFire();
+	}
+}
+
+void ATankPlayerController::SwapWeapon()
+{
+	if (TankPawn)
+	{
+		TankPawn->SwapWeapon();
 	}
 }

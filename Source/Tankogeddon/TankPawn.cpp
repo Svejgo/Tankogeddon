@@ -2,6 +2,7 @@
 
 
 #include "TankPawn.h"
+#include "TankPlayerController.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
@@ -37,6 +38,12 @@ ATankPawn::ATankPawn()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health component"));
+	HealthComponent->OnDie.AddUObject(this, &ATankPawn::Die);
+	HealthComponent->OnDamaged.AddUObject(this, &ATankPawn::DamageTaked);
+
+	HitCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Hit collider"));
+	HitCollider->SetupAttachment(BodyMesh);
 }
 
 // Called when the game starts or when spawned
@@ -45,7 +52,7 @@ void ATankPawn::BeginPlay()
 	Super::BeginPlay();
 	TankController = Cast<ATankPlayerController>(GetController());
 
-	SetupCannon();
+	SetupCannon(FirstCannonClass);
 }
 
 // Called every frame
@@ -110,7 +117,7 @@ void ATankPawn::Fire()
 	}
 }
 
-void ATankPawn::SetupCannon()
+void ATankPawn::SetupCannon(TSubclassOf<class ACannon> NewCannon)
 {
 	if (Cannon)
 	{
@@ -118,12 +125,41 @@ void ATankPawn::SetupCannon()
 		Cannon = nullptr;
 	}
 
-	if (CannonClass)
+	if (NewCannon)
 	{
 		FActorSpawnParameters Params;
 		Params.Instigator = this;
 		Params.Owner = this;
-		Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, Params);
+		Cannon = GetWorld()->SpawnActor<ACannon>(NewCannon, Params);
 		Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
 	}
+}
+
+void ATankPawn::AddAmmo(int32 Ammo)
+{
+	Cannon->AddAmmo(Ammo);
+}
+
+void ATankPawn::SwapWeapon()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Weapon swapped"));
+	//??????
+	TSubclassOf<ACannon> TempCannon = this->FirstCannonClass;
+	this->SetupCannon(SecondCannonClass);
+	SecondCannonClass = TempCannon;
+}
+
+void ATankPawn::TakeDamage(FDamageData DamageData)
+{
+	HealthComponent->TakeDamage(DamageData);
+}
+
+void ATankPawn::Die()
+{
+	Destroy();
+}
+
+void ATankPawn::DamageTaked(float DamageValue)
+{
+	UE_LOG(TankLog, Warning, TEXT("Tank %s taked damage:%f Health:%f"), *GetName(), DamageValue, HealthComponent->GetHealth());
 }

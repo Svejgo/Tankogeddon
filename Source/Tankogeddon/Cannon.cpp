@@ -3,6 +3,7 @@
 
 #include "Cannon.h"
 #include "Projectile.h"
+#include "DamageTaker.h"
 #include "DrawDebugHelpers.h"
 #include <Components/ArrowComponent.h>
 
@@ -60,9 +61,24 @@ void ACannon::Fire()
 		if (GetWorld()->LineTraceSingleByChannel(HitResult, StartPoint, EndPoint, ECollisionChannel::ECC_Visibility, TraceParams))
 		{
 			DrawDebugLine(GetWorld(), StartPoint, HitResult.Location, FColor::Red, false, 0.5f, 0, 5);
+			AActor* MyOwner = GetOwner();
+			AActor* OwnerByOwner = MyOwner != nullptr ? MyOwner->GetOwner() : nullptr;
 			if (HitResult.Actor.IsValid())
 			{
-				HitResult.Actor->Destroy();
+				if (HitResult.Actor != MyOwner && HitResult.Actor != OwnerByOwner)
+				{
+					IDamageTaker* DamageTakerActor = Cast<IDamageTaker>(HitResult.Actor);
+					if (DamageTakerActor)
+					{
+						FDamageData DamageData;
+						DamageData.DamageValue = TraceDamage;
+						DamageData.Instigator = MyOwner;
+						DamageData.DamageMaker = this;
+
+						DamageTakerActor->TakeDamage(DamageData);
+					}
+				}
+				//HitResult.Actor->Destroy();
 			}
 		}
 		else

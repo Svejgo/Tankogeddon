@@ -4,6 +4,7 @@
 #include "TankPlayerController.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Cannon.h"
+#include "AmmoBox.h"
 #include "TimerManager.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/ArrowComponent.h"
@@ -27,6 +28,11 @@ ATurret::ATurret()
 	HitCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Hit collider"));
 	HitCollider->SetupAttachment(TurretMesh);
 
+
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health component"));
+	HealthComponent->OnDie.AddUObject(this, &ATurret::Die);
+	HealthComponent->OnDamaged.AddUObject(this, &ATurret::DamageTaked);
+
 	UStaticMesh* TurretMeshTemp = LoadObject<UStaticMesh>(this, *TurretMeshPath);
 	if (TurretMeshTemp)
 	{
@@ -38,6 +44,7 @@ ATurret::ATurret()
 	{
 		BodyMesh->SetStaticMesh(BodyMeshTemp);
 	}
+
 }
 
 // Called when the game starts or when spawned
@@ -106,3 +113,24 @@ void ATurret::Fire()
 		Cannon->Fire();
 }
 
+void ATurret::TakeDamage(FDamageData DamageData)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Turret %s taked damage:%f "), *GetName(), DamageData.DamageValue);
+	HealthComponent->TakeDamage(DamageData);
+}
+
+void ATurret::Die()
+{
+	FActorSpawnParameters Params;
+	Params.Owner = this;
+	FVector MeshLocation = this->GetActorLocation();
+	AmmoBox = GetWorld()->SpawnActor<AAmmoBox>(AmmoBoxClass,Params);
+	UE_LOG(LogTemp, Warning, TEXT("MeshLocation: %f %f %f"), MeshLocation.X, MeshLocation.Y, MeshLocation.Z);
+	AmmoBox->SetActorLocation(MeshLocation);
+	this->Destroy();
+}
+
+void ATurret::DamageTaked(float DamageValue)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Turret %s taked damage:%f Health:%f"), *GetName(), DamageValue, HealthComponent->GetHealth());
+}

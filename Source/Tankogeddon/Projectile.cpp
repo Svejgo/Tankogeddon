@@ -2,6 +2,7 @@
 
 
 #include "Projectile.h"
+#include "DamageTaker.h"
 #include "Components/StaticMeshComponent.h"
 #include "TimerManager.h"
 
@@ -25,12 +26,39 @@ void AProjectile::Start()
 	SetLifeSpan(MoveRange / MoveSpeed);
 }
 
-void AProjectile::OnMeshOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, 
+//void AProjectile::OnMeshOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, 
+//	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+//{
+//	UE_LOG(LogTemp, Warning, TEXT("Projectile %s collided with %s. "), *GetName(), *OtherActor->GetName());
+//	OtherActor->Destroy();
+//	Destroy();
+//}
+
+void AProjectile::OnMeshOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Projectile %s collided with %s. "), *GetName(), *OtherActor->GetName());
-	OtherActor->Destroy();
-	Destroy();
+	AActor* MyOwner = GetOwner();
+	AActor* OwnerByOwner = MyOwner != nullptr ? MyOwner->GetOwner() : nullptr;
+	if (OtherActor != MyOwner && OtherActor != OwnerByOwner)
+	{
+		IDamageTaker* DamageTakerActor = Cast<IDamageTaker>(OtherActor);
+		if (DamageTakerActor)
+		{
+			FDamageData DamageData;
+			DamageData.DamageValue = Damage;
+			DamageData.Instigator = MyOwner;
+			DamageData.DamageMaker = this;
+
+			DamageTakerActor->TakeDamage(DamageData);
+		}
+	/*	else
+		{
+			OtherActor->Destroy();
+		}*/
+
+		Destroy();
+	}
 }
 
 void AProjectile::Move()

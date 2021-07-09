@@ -7,10 +7,12 @@
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Cannon.h"
+#include "DamageTaker.h"
+#include "HealthComponent.h"
 #include "Turret.generated.h"
 
 UCLASS()
-class TANKOGEDDON_API ATurret : public AActor
+class TANKOGEDDON_API ATurret : public AActor, public IDamageTaker
 {
     GENERATED_BODY()
 protected:
@@ -37,13 +39,28 @@ protected:
     const FString BodyMeshPath = "StaticMesh'/Game/CSC/Meshes/SM_CSC_Tower1.SM_CSC_Tower1'";
     const FString TurretMeshPath = "StaticMesh'/Game/CSC/Meshes/SM_CSC_Gun1.SM_CSC_Gun1'";
 
+    UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+        UHealthComponent* HealthComponent;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Drop")
+        TSubclassOf<class AAmmoBox> AmmoBoxClass;
+
 private:
     UPROPERTY()
         ACannon* Cannon;
     UPROPERTY()
         APawn* PlayerPawn;
+    UPROPERTY()
+        AAmmoBox* AmmoBox;
 public:
     ATurret();
+    UFUNCTION()
+        void TakeDamage(FDamageData DamageData);
+
+    UFUNCTION()
+        void Die();
+    UFUNCTION()
+        void DamageTaked(float DamageValue);
+
 protected:
     virtual void BeginPlay() override;
     virtual void Destroyed() override;

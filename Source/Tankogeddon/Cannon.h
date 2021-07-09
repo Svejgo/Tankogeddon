@@ -54,6 +54,8 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret|Cannon")
 		int32 Ammo = 10;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret|Cannon")
+		float TraceDamage = 1.f;
 	UFUNCTION()
 	void AddAmmo(int32 AddedAmmo);
 

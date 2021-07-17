@@ -51,8 +51,9 @@ public:
 		float TurretRotationSensitivity = 0.5f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret|Cannon")
-		TSubclassOf<ACannon> CannonClass;
-
+		TSubclassOf<ACannon> FirstCannonClass;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret|Cannon")
+		TSubclassOf<ACannon> SecondCannonClass;
 
 
 protected:
@@ -76,17 +77,19 @@ public:
 		void Fire();
 	UFUNCTION(BlueprintCallable, Category = "Fire")
 		void AltFire();
+	UFUNCTION(BlueprintCallable, Category = "Fire")
+		void SwapWeapon();
+	UFUNCTION(BlueprintCallable, Category = "Turret|Cannon")
+	    void SetupCannon(TSubclassOf<class ACannon> NewCannon);
+	UFUNCTION(BlueprintCallable, Category = "Turret|Cannon")
+		void AddAmmo(int32 Ammo);
 
 private:
 	UPROPERTY()
-	ATankPlayerController* TankController = nullptr;
-	
-	void SetupCannon();
-
-	UPROPERTY()
 	class ACannon* Cannon;
 
-	
+	UPROPERTY()
+	ATankPlayerController* TankController = nullptr;
 
 	float CurrentMoveForwardAxis = 0.f;
 	float CurrentMoveRightAxis = 0.f;

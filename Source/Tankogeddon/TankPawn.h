@@ -2,9 +2,12 @@
 
 #pragma once
 
+#include "Cannon.h"
 #include "CoreMinimal.h"
+#include "DamageTaker.h"
+#include "HealthComponent.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/Pawn.h"
-#include "TankPlayerController.h"
 #include "TankPawn.generated.h"
 
 class UStaticMeshComponent;
@@ -15,7 +18,7 @@ class UArrowComponent;
 class ACannon;
 
 UCLASS()
-class TANKOGEDDON_API ATankPawn : public APawn
+class TANKOGEDDON_API ATankPawn : public APawn, public IDamageTaker
 {
 	GENERATED_BODY()
 
@@ -55,10 +58,22 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret|Cannon")
 		TSubclassOf<ACannon> SecondCannonClass;
 
+	UFUNCTION()
+		void TakeDamage(FDamageData DamageData);
+
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+		UHealthComponent* HealthComponent;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+		UBoxComponent* HitCollider;
+	UFUNCTION()
+		void Die();
+
+	UFUNCTION()
+		void DamageTaked(float DamageValue);
 
 public:	
 	// Called every frame
